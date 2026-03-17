@@ -1,31 +1,45 @@
-while True:
-    try:
-        num1 = float(input("Digite o primeiro numero: "))
-        num2 = float(input("Digite o segundo numero: "))
-    except ValueError:
-        print("Entrada invalida. Digite apenas numeros.")
-        continue
-
-    operador = input("Digite a operacao (+, -, *, /): ")
-
+def calcular(num1, num2, operador):
     if operador == "+":
-        resultado = num1 + num2
-    elif operador == "-":
-        resultado = num1 - num2
-    elif operador == "*":
-        resultado = num1 * num2
-    elif operador == "/":
+        return num1 + num2
+    if operador == "-":
+        return num1 - num2
+    if operador == "*":
+        return num1 * num2
+    if operador == "/":
         if num2 == 0:
-            print("Erro: divisao por zero.")
-            continue
-        resultado = num1 / num2
-    else:
-        print("Operacao invalida.")
-        continue
+            raise ZeroDivisionError("Divisao por zero nao permitida.")
+        return num1 / num2
+    raise ValueError("Operacao invalida.")
 
-    print(f"Resultado: {resultado}")
 
-    continuar = input("Deseja fazer outra conta? (s/n): ").strip().lower()
-    if continuar != "s":
-        print("Encerrando calculadora...")
-        break
+def ler_numero(mensagem):
+    while True:
+        try:
+            return float(input(mensagem))
+        except ValueError:
+            print("Entrada invalida. Digite um numero valido.")
+
+
+def main():
+    print("Calculadora - Fase 3")
+
+    while True:
+        num1 = ler_numero("Digite o primeiro numero: ")
+        num2 = ler_numero("Digite o segundo numero: ")
+        operador = input("Digite a operacao (+, -, *, /): ").strip()
+
+        try:
+            resultado = calcular(num1, num2, operador)
+            print(f"Resultado: {resultado}")
+        except (ValueError, ZeroDivisionError) as erro:
+            print(f"Erro: {erro}")
+
+        continuar = input("Deseja continuar? (s/n): ").strip().lower()
+        if continuar != "s":
+            print("Encerrando calculadora...")
+            break
+
+
+if __name__ == "__main__":
+    main()
+
