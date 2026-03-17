@@ -1,15 +1,18 @@
 def calcular(num1, num2, operador):
-    if operador == "+":
-        return num1 + num2
-    if operador == "-":
-        return num1 - num2
-    if operador == "*":
-        return num1 * num2
-    if operador == "/":
-        if num2 == 0:
-            raise ZeroDivisionError("Divisao por zero nao permitida.")
-        return num1 / num2
-    raise ValueError("Operacao invalida.")
+    operacoes = {
+        "+": lambda a, b: a + b,
+        "-": lambda a, b: a - b,
+        "*": lambda a, b: a * b,
+        "/": lambda a, b: a / b,
+    }
+
+    if operador not in operacoes:
+        raise ValueError("Operacao invalida.")
+
+    if operador == "/" and num2 == 0:
+        raise ZeroDivisionError("Divisao por zero nao permitida.")
+
+    return operacoes[operador](num1, num2)
 
 
 def ler_numero(mensagem):
@@ -20,26 +23,51 @@ def ler_numero(mensagem):
             print("Entrada invalida. Digite um numero valido.")
 
 
+def mostrar_historico(historico):
+    if not historico:
+        print("Historico vazio.")
+        return
+
+    print("\nHistorico de operacoes:")
+    for item in historico:
+        print(item)
+    print()
+
+
 def main():
-    print("Calculadora - Fase 3")
+    historico = []
 
     while True:
-        num1 = ler_numero("Digite o primeiro numero: ")
-        num2 = ler_numero("Digite o segundo numero: ")
-        operador = input("Digite a operacao (+, -, *, /): ").strip()
+        print("\n=== Calculadora - Fase 4 ===")
+        print("1. Nova operacao")
+        print("2. Ver historico")
+        print("3. Sair")
 
-        try:
-            resultado = calcular(num1, num2, operador)
-            print(f"Resultado: {resultado}")
-        except (ValueError, ZeroDivisionError) as erro:
-            print(f"Erro: {erro}")
+        opcao = input("Escolha uma opcao: ").strip()
 
-        continuar = input("Deseja continuar? (s/n): ").strip().lower()
-        if continuar != "s":
+        if opcao == "1":
+            num1 = ler_numero("Digite o primeiro numero: ")
+            num2 = ler_numero("Digite o segundo numero: ")
+            operador = input("Digite a operacao (+, -, *, /): ").strip()
+
+            try:
+                resultado = calcular(num1, num2, operador)
+                registro = f"{num1} {operador} {num2} = {resultado}"
+                historico.append(registro)
+                print(f"Resultado: {resultado}")
+            except (ValueError, ZeroDivisionError) as erro:
+                print(f"Erro: {erro}")
+
+        elif opcao == "2":
+            mostrar_historico(historico)
+
+        elif opcao == "3":
             print("Encerrando calculadora...")
             break
+
+        else:
+            print("Opcao invalida. Tente novamente.")
 
 
 if __name__ == "__main__":
     main()
-
